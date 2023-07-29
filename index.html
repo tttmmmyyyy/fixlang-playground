@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <div style="height: 100%; display: flex; flex-direction: column;">
+    <div style="height: 99%; display: flex; flex-direction: column;">
         <div id="header">
             <div class="header-content">
                 <h1 id="title" style="margin-top: 0px; margin-bottom: 0px; margin-right: 5px; margin-left: 0px;">fix
@@ -27,8 +27,8 @@
             </div>
         </div>
         <div id="editor-area" style="flex-grow: 1; border: 1px; display: flex">
-            <div id="editor" style="height: 100%; width: 50%; display: inline-block"></div>
-            <div id="output-area" style="height: 100%; width: 50%; display: inline-block">
+            <div id="editor" style="height: 100%; width: 65%; display: inline-block"></div>
+            <div id="output-area" style="height: 100%; width: 35%; display: inline-block">
                 <textarea id="output" readonly
                     style="height: 100%; width: 100%; box-sizing: border-box; padding: 3px; background-color: #F2F2F2; resize: none;"></textarea>
             </div>
@@ -63,12 +63,13 @@
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
-    // set up
+    // set up editor
     var editor = ace.edit("editor", {
         theme: "ace/theme/tomorrow_night",
         mode: "ace/mode/fixlang",
         minLines: 2
     });
+    editor.setOption("wrap", true);
 
     // set initial source code
     var source_param = getParam("src");
