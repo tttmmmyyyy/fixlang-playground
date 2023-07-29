@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <div style="height: 100vh;">
+    <div style="height: 100%; display: flex; flex-direction: column;">
         <div id="header">
             <div class="header-content">
                 <h1 id="title" style="margin-top: 0px; margin-bottom: 0px; margin-right: 5px; margin-left: 0px;">fix
@@ -26,7 +26,7 @@
                 <a href="https://github.com/tttmmmyyyy/fixlang#examples">examples</a>
             </div>
         </div>
-        <div id="editor-area" style="height: 90%; border: 1px; display: flex">
+        <div id="editor-area" style="flex-grow: 1; border: 1px; display: flex">
             <div id="editor" style="height: 100%; width: 50%; display: inline-block"></div>
             <div id="output-area" style="height: 100%; width: 50%; display: inline-block">
                 <textarea id="output" readonly
@@ -41,6 +41,12 @@
         display: inline-block;
         margin-right: 5px;
         margin-left: 5px;
+    }
+
+    html,
+    body {
+        height: 100%;
+        margin: 0;
     }
 </style>
 
