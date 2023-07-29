@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>fix playground</title>
+</head>
+
+<body>
+    <div id="header">
+        <div class="header-content">
+            <h1 id="title" style="margin-top: 0px; margin-bottom: 0px; margin-right: 5px; margin-left: 0px;">fix
+                playground</h1>
+        </div>
+        <div class="header-content">
+            <button id="run-btn" onclick="run()">Run Code</button>
+        </div>
+        <div class="header-content">
+            <a href="https://github.com/tttmmmyyyy/fixlang">repo</a>
+        </div>
+        <div class="header-content">
+            <a href="https://github.com/tttmmmyyyy/fixlang/blob/main/Document.md">doc</a>
+        </div>
+    </div>
+    <div id="editor-area" style="height: 400px; border: 1px; display: flex">
+        <div id="editor" style="height: 100%; width: 50%; display: inline-block"></div>
+        <div id="output-area" style="height: 100%; width: 50%; display: inline-block">
+            <textarea id="output" readonly
+                style="height: 100%; width: 100%; box-sizing: border-box; padding: 3px; background-color: #F2F2F2; resize: none;"></textarea>
+        </div>
+    </div>
+
+</body>
+
+<style type="text/css">
+    .header-content {
+        display: inline-block;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+</style>
+
+<script src="./src-noconflict/ace.js"></script>
+<script>
+    // a functon to get parameter
+    function getParam(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    // set up
+    var editor = ace.edit("editor", {
+        theme: "ace/theme/tomorrow_night",
+        mode: "ace/mode/fixlang",
+        minLines: 2
+    });
+
+    // set initial source code
+    var source_param = getParam("src");
+    if (source_param?.trim()) {
+        editor.setValue(source_param);
+    } else {
+        editor.setValue(`module Main;
+
+main : IO ();
+main = println $ "Hello World!";
+`);
+    }
+
+    // hander for run button
+    function run() {
+        var source = editor.getValue();
+        var output = document.getElementById('output');
+        output.innerText = "running...";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://run-fix-36eqzptjpa-an.a.run.app');
+        // xhr.open('POST', 'http://localhost:8080');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status == 200) {
+                    output.innerText = xhr.responseText;
+                } else {
+                    output.innerText = "server error (code: " + xhr.status + ")"
+                }
+            }
+        }
+        xhr.send(source);
+    }
+</script>
