@@ -99,7 +99,7 @@ main = println $ "Hello World!";
     function run() {
         var source = editor.getValue();
         var output = document.getElementById('output');
-        output.innerText = "running...";
+        output.value = "running...";
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://run-fix-36eqzptjpa-an.a.run.app');
