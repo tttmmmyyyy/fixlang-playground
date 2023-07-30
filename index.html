@@ -41,7 +41,7 @@
             border-radius: 3px;" onclick="run()">Run</a>
         </div>
         <div id="output-area" style="width: 100%; display: inline-block">
-            <textarea id="output" readonly rows="5"
+            <textarea id="output" readonly rows="8"
                 style="height: 100%; width: 100%; box-sizing: border-box; padding: 3px; background-color: #F2F2F2; resize: none;"></textarea>
         </div>
     </div>
@@ -81,6 +81,7 @@
         minLines: 2
     });
     editor.setOption("wrap", true);
+    editor.setOption("fontSize", "14px");
 
     // set initial source code
     var source_param = getParam("src");
