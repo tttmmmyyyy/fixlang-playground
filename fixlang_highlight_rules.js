@@ -42,12 +42,12 @@ define(function (require, exports, module) {
                 {
                     // numeric constants
                     token: "constant.numeric",
-                    regex: /[^a-zA-Z0-9](\-)?[0-9]+(\.[0-9]+)?(e[\+|\-]?[0-9]+)?/
+                    regex: /\b(\-)?[0-9]+(\.[0-9]+)?(e[\+|\-]?[0-9]+)?/
                 },
                 {
                     // types, traits, namespaces
                     token: "support.class",
-                    regex: /(^|\s)[A-Z][A-Za-z0-9]*/
+                    regex: /\b[A-Z][A-Za-z0-9]*/
                 },
                 {
                     // string literal

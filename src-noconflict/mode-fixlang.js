@@ -1,4 +1,4 @@
-ace.define("ace/mode/fixlang_highlight_rules", [], function (require, exports, module) {
+ace.define("ace/mode/fixlang_highlight_rules",[], function (require, exports, module) {
     "use strict";
 
     var oop = require("../lib/oop");
@@ -36,11 +36,11 @@ ace.define("ace/mode/fixlang_highlight_rules", [], function (require, exports, m
                 },
                 {
                     token: "constant.numeric",
-                    regex: /[^a-zA-Z0-9](\-)?[0-9]+(\.[0-9]+)?(e[\+|\-]?[0-9]+)?/
+                    regex: /\b(\-)?[0-9]+(\.[0-9]+)?(e[\+|\-]?[0-9]+)?/
                 },
                 {
                     token: "support.class",
-                    regex: /(^|\s)[A-Z][A-Za-z0-9]*/
+                    regex: /\b[A-Z][A-Za-z0-9]*/
                 },
                 {
                     token: "string.double",
@@ -105,7 +105,7 @@ ace.define("ace/mode/fixlang_highlight_rules", [], function (require, exports, m
     exports.FixlangHighlightRules = FixlangHighlightRules;
 });
 
-ace.define("ace/mode/fixlang", [], function (require, exports, module) {
+ace.define("ace/mode/fixlang",[], function (require, exports, module) {
     "use strict";
 
     var oop = require("../lib/oop");
@@ -119,10 +119,11 @@ ace.define("ace/mode/fixlang", [], function (require, exports, module) {
     oop.inherits(Mode, TextMode);
 
     exports.Mode = Mode;
-}); (function () {
-    ace.require(["ace/mode/fixlang"], function (m) {
-        if (typeof module == "object" && typeof exports == "object" && module) {
-            module.exports = m;
-        }
-    });
-})();
+});                (function() {
+                    ace.require(["ace/mode/fixlang"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            
