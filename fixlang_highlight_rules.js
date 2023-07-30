@@ -42,7 +42,7 @@ define(function (require, exports, module) {
                 {
                     // numeric constants
                     token: "constant.numeric",
-                    regex: /(\-)?[0-9]+(\.[0-9]+)?(e[\+|\-]?[0-9]+)?/
+                    regex: /[^a-zA-Z0-9](\-)?[0-9]+(\.[0-9]+)?(e[\+|\-]?[0-9]+)?/
                 },
                 {
                     // types, traits, namespaces
