@@ -105,9 +105,9 @@ main = println $ "Hello World!";
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status == 200) {
-                    output.innerText = xhr.responseText;
+                    output.value = xhr.responseText;
                 } else {
-                    output.innerText = "server error (code: " + xhr.status + ")"
+                    output.value = "server error (code: " + xhr.status + ")"
                 }
             }
         }
