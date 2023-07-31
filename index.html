@@ -29,16 +29,8 @@
             <div id="editor" style="height: 100%; width: 100%; display: inline-block"></div>
         </div>
         <div style="display: inline-block; margin: 2px 0px 2px 0px; height: 26px">
-            <a href="#" id="run-btn" style="
-            font-size: 16px;
-            width: 80px; 
-            text-align: center;
-            border: 1px solid;
-            background-color: #F2F2F2;
-            display: block;
-            text-decoration: none;
-            color: black;
-            border-radius: 3px;" onclick="run()">Run</a>
+            <a href="#" id="run-btn" class="a_button" onclick="run()">Run</a><a href="#" id="share-btn" class="a_button"
+                onclick="share()">Copy link</a>
         </div>
         <div id="output-area" style="width: 100%; display: inline-block">
             <textarea id="output" readonly rows="8"
@@ -52,6 +44,19 @@
         display: inline-block;
         margin-right: 5px;
         margin-left: 5px;
+    }
+
+    .a_button {
+        display: inline-block;
+        font-size: 16px;
+        width: 100px;
+        text-align: center;
+        border: 1px solid;
+        background-color: #F2F2F2;
+        text-decoration: none;
+        color: black;
+        border-radius: 3px;
+        margin: 0px 2px 0px 2px;
     }
 
     html,
@@ -84,8 +89,14 @@
     editor.setOption("fontSize", "14px");
 
     // set initial source code
-    var source_param = getParam("src");
-    if (source_param?.trim()) {
+    var source_param = getParam("src");  // url encoded source
+    var source_param2 = getParam("src2"); // base64 encoded source
+    if (source_param2?.trim()) {
+        const decoded_utf8str = atob(source_param2);
+        const decoded_array = new Uint8Array(Array.prototype.map.call(decoded_utf8str, c => c.charCodeAt()));
+        const decoded = new TextDecoder().decode(decoded_array);
+        editor.setValue(decoded);
+    } else if (source_param?.trim()) {
         editor.setValue(source_param);
     } else {
         editor.setValue(`module Main;
@@ -95,7 +106,7 @@ main = println $ "Hello World!";
 `);
     }
 
-    // hander for run button
+    // handler for run button
     function run() {
         var source = editor.getValue();
         var output = document.getElementById('output');
@@ -114,5 +125,20 @@ main = println $ "Hello World!";
             }
         }
         xhr.send(source);
+    }
+
+    // handler for share button
+    function share() {
+        var source = editor.getValue();
+        let utf8str = String.fromCharCode.apply(null, new TextEncoder().encode(source));
+        const encoded = btoa(utf8str);
+        const url = location.protocol + '//' + location.host + location.pathname + "?src2=" + encodeURIComponent(encoded);
+        navigator.clipboard.writeText(url).then(function () {
+            var share_btn = document.getElementById("share-btn");
+            share_btn.innerText = "Copied!";
+            window.setTimeout(function () {
+                share_btn.innerText = "Copy link";
+            }, 1500);
+        })
     }
 </script>
