@@ -7,7 +7,7 @@ define(function (require, exports, module) {
 
     var FixlangHighlightRules = function () {
         var keywordMapper = this.createKeywordMapper({
-            "keyword.control": ("if|else|do|let|in|eval"),
+            "keyword.control": ("if|match|else|do|let|in|eval"),
             "keyword.other": ("import"),
             "constant.language": ("true|false|nullptr"),
             "storage.type": ("type|struct|union|module|namespace|impl|trait"),
