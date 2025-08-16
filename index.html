@@ -24,8 +24,8 @@
             </div>
         </div>
         <div id="button-bar" style="display: flex; align-items: center; margin: 2px 0 2px 0; height: 26px;">
-            <a href="#" id="run-btn" class="a_button" onclick="run()">Run</a>
-            <a href="#" id="share-btn" class="a_button" onclick="share()">Share</a>
+            <a href="#" id="run-btn" class="header-item" onclick="run()">Run</a>
+            <a href="#" id="share-btn" class="header-item" onclick="share()">Share</a>
         </div>
         <div id="editor-area" style="flex-grow: 1; border: 1px; display: flex">
             <div id="editor" style="height: 100%; width: 100%; display: inline-block"></div>
@@ -40,7 +40,7 @@
 <style>
     .header-bar {
         min-height: 48px;
-        padding: 5px 10px 5px 10px;
+        margin: 5px 10px 5px 10px;
         box-sizing: border-box;
         display: flex;
         align-items: baseline;
@@ -77,18 +77,7 @@
         margin-left: 5px;
     }
 
-    .a_button {
-        display: inline-block;
-        font-size: 16px;
-        width: 100px;
-        text-align: center;
-        border: 1px solid;
-        background-color: #F2F2F2;
-        text-decoration: none;
-        color: black;
-        border-radius: 3px;
-        margin: 0px 2px 0px 2px;
-    }
+
 
     html,
     body {
