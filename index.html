@@ -389,6 +389,16 @@ main : IO () = (
         const encoded = btoa(utf8str);
         const url = location.protocol + '//' + location.host + location.pathname + "?src2=" + encodeURIComponent(encoded);
         navigator.clipboard.writeText(url);
+
+        // Change icon to check temporarily
+        const shareIcon = document.querySelector('#share-btn .material-symbols-outlined');
+        const originalIcon = shareIcon.textContent;
+        shareIcon.textContent = 'check';
+
+        // Restore original icon after 2 seconds
+        setTimeout(() => {
+            shareIcon.textContent = originalIcon;
+        }, 2000);
     }
 
     // handler for cut button
