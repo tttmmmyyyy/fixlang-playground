@@ -124,12 +124,15 @@
     }
 
     .io-panel textarea {
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
     }
 
     .io-panel textarea::-webkit-scrollbar {
-        display: none; /* WebKit browsers (Chrome, Safari, newer versions of Edge) */
+        display: none;
+        /* WebKit browsers (Chrome, Safari, newer versions of Edge) */
     }
 
 
@@ -146,8 +149,8 @@
 <script src="./src-noconflict/ace.js"></script>
 <script>
     // Configuration
-    // const API_URL = 'https://run-fix-36eqzptjpa-an.a.run.app';  // Production
-    const API_URL = 'http://localhost:8080';  // Development
+    const API_URL = 'https://run-fix-36eqzptjpa-an.a.run.app';  // Production
+    // const API_URL = 'http://localhost:8080';  // Development
 
     // a functon to get parameter
     function getParam(name, url) {
