@@ -149,13 +149,23 @@
         vertical-align: middle;
         color: #d4d4d4;
         text-decoration: none;
+        padding: 4px 6px;
+        border-radius: 3px;
+        display: inline-flex;
+        align-items: center;
+        transition: background-color 0.2s;
     }
 
     .header-item:visited,
-    .header-item:active,
-    .header-item:hover {
+    .header-item:active {
         text-decoration: none;
         color: #d4d4d4;
+    }
+
+    .header-item:hover {
+        text-decoration: none;
+        color: #ffffff;
+        background-color: #4a4a4a;
     }
 
     .material-symbols-outlined {
@@ -170,6 +180,11 @@
     #title.header-item {
         font-size: 1.8em;
         font-weight: bold;
+        color: #d4d4d4;
+    }
+
+    #title.header-item:hover {
+        background-color: transparent;
         color: #d4d4d4;
     }
 </style>
