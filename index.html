@@ -30,9 +30,22 @@
         <div id="editor-area" style="flex-grow: 1; border: 1px; display: flex">
             <div id="editor" style="height: 100%; width: 100%; display: inline-block"></div>
         </div>
-        <div id="output-area" style="width: 100%; display: inline-block">
-            <textarea id="output" readonly rows="8"
-                style="height: 100%; width: 100%; box-sizing: border-box; padding: 3px; background-color: #2d2d30; color: #ffffff; border: 1px solid #666; resize: none;"></textarea>
+        <div id="output-area" style="width: 100%; display: flex; min-height: 200px;">
+            <div class="io-panel">
+                <div class="io-header">Input</div>
+                <textarea id="input" rows="8" placeholder="Standard input..."
+                    style="height: calc(100% - 25px); width: 100%; box-sizing: border-box; padding: 3px; background-color: #2d2d30; color: #d4d4d4; border: 1px solid #666; resize: none;"></textarea>
+            </div>
+            <div class="io-panel">
+                <div class="io-header">Output</div>
+                <textarea id="output" readonly rows="8"
+                    style="height: calc(100% - 25px); width: 100%; box-sizing: border-box; padding: 3px; background-color: #2d2d30; color: #d4d4d4; border: 1px solid #666; resize: none;"></textarea>
+            </div>
+            <div class="io-panel">
+                <div class="io-header">Error</div>
+                <textarea id="error" readonly rows="8"
+                    style="height: calc(100% - 25px); width: 100%; box-sizing: border-box; padding: 3px; background-color: #2d2d30; color: #ff9999; border: 1px solid #666; resize: none;"></textarea>
+            </div>
         </div>
     </div>
 </body>
@@ -62,7 +75,7 @@
         font-family: 'Yu Gothic', 'Meiryo', 'MS PGothic', 'Noto Sans JP', 'Noto Sans', Arial, Helvetica, sans-serif;
         font-weight: bold;
         vertical-align: middle;
-        color: #ffffff;
+        color: #d4d4d4;
         text-decoration: none;
     }
 
@@ -70,13 +83,13 @@
     .header-item:active,
     .header-item:hover {
         text-decoration: none;
-        color: #ffffff;
+        color: #d4d4d4;
     }
 
     #title.header-item {
         font-size: 1.8em;
         font-weight: bold;
-        color: #ffffff;
+        color: #d4d4d4;
     }
 </style>
 
@@ -88,6 +101,31 @@
         margin-left: 0px;
     }
 
+    .io-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #666;
+        min-width: 200px;
+        resize: horizontal;
+        overflow: auto;
+    }
+
+    .io-panel:last-child {
+        border-right: none;
+        resize: none;
+    }
+
+    .io-header {
+        background-color: #3c3c3c;
+        color: #d4d4d4;
+        padding: 4px 8px;
+        font-weight: bold;
+        font-size: 0.9em;
+        border-bottom: 1px solid #666;
+        user-select: none;
+    }
+
 
 
     html,
@@ -95,7 +133,7 @@
         height: 100%;
         margin: 0;
         background-color: #2d2d30;
-        color: #ffffff;
+        color: #d4d4d4;
     }
 </style>
 
