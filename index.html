@@ -188,7 +188,9 @@ main : IO () = (
         var source = editor.getValue();
         var stdin = document.getElementById('input').value;
         var output = document.getElementById('output');
+        var error = document.getElementById('error');
         output.value = "Running...";
+        error.value = "";
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://run-fix-36eqzptjpa-an.a.run.app');
@@ -197,9 +199,17 @@ main : IO () = (
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status == 200) {
-                    output.value = xhr.responseText;
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        output.value = response.output || "";
+                        error.value = response.error || "";
+                    } catch (e) {
+                        output.value = "";
+                        error.value = "Failed to parse server response: " + e.message;
+                    }
                 } else {
-                    output.value = "Server error (code: " + xhr.status + ")"
+                    output.value = "";
+                    error.value = "Server error (code: " + xhr.status + ")";
                 }
             }
         }
