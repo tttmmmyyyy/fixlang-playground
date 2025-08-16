@@ -186,22 +186,29 @@ main : IO () = (
     // handler for run button
     function run() {
         var source = editor.getValue();
+        var stdin = document.getElementById('input').value;
         var output = document.getElementById('output');
         output.value = "Running...";
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://run-fix-36eqzptjpa-an.a.run.app');
+        xhr.setRequestHeader('Content-Type', 'application/json');
         // xhr.open('POST', 'http://localhost:8080');
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status == 200) {
                     output.value = xhr.responseText;
                 } else {
-                    output.value = "server error (code: " + xhr.status + ")"
+                    output.value = "Server error (code: " + xhr.status + ")"
                 }
             }
         }
-        xhr.send(source);
+
+        var requestData = {
+            src: source,
+            stdin: stdin
+        };
+        xhr.send(JSON.stringify(requestData));
     }
 
     // handler for share button
