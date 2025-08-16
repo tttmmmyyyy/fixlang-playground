@@ -131,15 +131,33 @@
 
     /* Group separators with vertical lines */
     #share-btn {
-        margin-right: 15px;
-        padding-right: 15px;
-        border-right: 1px solid #666;
+        margin-right: 30px;
+        position: relative;
+    }
+
+    #share-btn::after {
+        content: '';
+        position: absolute;
+        right: -15px;
+        top: 20%;
+        bottom: 20%;
+        width: 1px;
+        background-color: #666;
     }
 
     #redo-btn {
-        margin-right: 15px;
-        padding-right: 15px;
-        border-right: 1px solid #666;
+        margin-right: 30px;
+        position: relative;
+    }
+
+    #redo-btn::after {
+        content: '';
+        position: absolute;
+        right: -15px;
+        top: 20%;
+        bottom: 20%;
+        width: 1px;
+        background-color: #666;
     }
 
     .header-item {
