@@ -205,8 +205,8 @@ main : IO () = (
         }
 
         var requestData = {
-            src: source,
-            stdin: stdin
+            source: source,
+            input: stdin
         };
         xhr.send(JSON.stringify(requestData));
     }
