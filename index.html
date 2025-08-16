@@ -136,6 +136,10 @@
 
 <script src="./src-noconflict/ace.js"></script>
 <script>
+    // Configuration
+    const API_URL = 'https://run-fix-36eqzptjpa-an.a.run.app';  // Production
+    // const API_URL = 'http://localhost:8080';  // Development
+
     // a functon to get parameter
     function getParam(name, url) {
         if (!url) url = window.location.href;
@@ -193,9 +197,8 @@ main : IO () = (
         error.value = "";
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://run-fix-36eqzptjpa-an.a.run.app');
+        xhr.open('POST', API_URL);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        // xhr.open('POST', 'http://localhost:8080');
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status == 200) {
