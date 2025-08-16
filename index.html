@@ -26,10 +26,29 @@
             </div>
         </div>
         <div id="button-bar" class="button-bar">
-            <a href="#" id="run-btn" class="header-item" onclick="run()"><span
+            <!-- Group 1: Run, Share -->
+            <a href="#" id="run-btn" class="header-item button-group-1" onclick="run()"><span
                     class="material-symbols-outlined">play_arrow</span></a>
-            <a href="#" id="share-btn" class="header-item" onclick="share()"><span
+            <a href="#" id="share-btn" class="header-item button-group-1" onclick="share()"><span
                     class="material-symbols-outlined">link</span></a>
+
+            <!-- Group 2: Undo, Redo -->
+            <a href="#" id="undo-btn" class="header-item button-group-2" onclick="undoCode()"><span
+                    class="material-symbols-outlined">undo</span></a>
+            <a href="#" id="redo-btn" class="header-item button-group-2" onclick="redoCode()"><span
+                    class="material-symbols-outlined">redo</span></a>
+
+            <!-- Group 3: Cut, Copy, Copy All, Paste, Clear -->
+            <a href="#" id="cut-btn" class="header-item button-group-3" onclick="cutCode()"><span
+                    class="material-symbols-outlined">content_cut</span></a>
+            <a href="#" id="copy-btn" class="header-item button-group-3" onclick="copyCode()"><span
+                    class="material-symbols-outlined">content_copy</span></a>
+            <a href="#" id="copy-all-btn" class="header-item button-group-3" onclick="copyAll()"><span
+                    class="material-symbols-outlined">copy_all</span></a>
+            <a href="#" id="paste-btn" class="header-item button-group-3" onclick="pasteCode()"><span
+                    class="material-symbols-outlined">content_paste</span></a>
+            <a href="#" id="clear-btn" class="header-item button-group-3" onclick="clearCode()"><span
+                    class="material-symbols-outlined">delete</span></a>
         </div>
         <div id="editor-area" style="flex-grow: 1; border: 1px; display: flex">
             <div id="editor" style="height: 100%; width: 100%; display: inline-block"></div>
@@ -70,8 +89,22 @@
         padding: 0;
     }
 
-    .button-bar .header-item:not(:last-child) {
-        margin-right: 20px;
+    /* Default button spacing */
+    .button-bar .header-item {
+        margin-right: 8px;
+    }
+
+    /* Group separators with vertical lines */
+    #share-btn {
+        margin-right: 15px;
+        padding-right: 15px;
+        border-right: 1px solid #666;
+    }
+
+    #redo-btn {
+        margin-right: 15px;
+        padding-right: 15px;
+        border-right: 1px solid #666;
     }
 
     .header-item {
@@ -260,5 +293,51 @@ main : IO () = (
         const encoded = btoa(utf8str);
         const url = location.protocol + '//' + location.host + location.pathname + "?src2=" + encodeURIComponent(encoded);
         navigator.clipboard.writeText(url);
+    }
+
+    // handler for cut button
+    function cutCode() {
+        var selectedText = editor.getSelectedText();
+        if (selectedText) {
+            navigator.clipboard.writeText(selectedText);
+            editor.session.replace(editor.getSelectionRange(), '');
+        }
+    }
+
+    // handler for clear button
+    function clearCode() {
+        editor.setValue('');
+        editor.clearSelection();
+    }
+
+    // handler for copy button
+    function copyCode() {
+        var selectedText = editor.getSelectedText();
+        if (selectedText) {
+            navigator.clipboard.writeText(selectedText);
+        }
+    }
+
+    // handler for copy all button
+    function copyAll() {
+        var source = editor.getValue();
+        navigator.clipboard.writeText(source);
+    }
+
+    // handler for paste button
+    function pasteCode() {
+        navigator.clipboard.readText().then(text => {
+            editor.insert(text);
+        });
+    }
+
+    // handler for undo button
+    function undoCode() {
+        editor.undo();
+    }
+
+    // handler for redo button
+    function redoCode() {
+        editor.redo();
     }
 </script>
