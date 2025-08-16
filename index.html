@@ -50,10 +50,10 @@
             <a href="#" id="clear-btn" class="header-item button-group-3" onclick="clearCode()"><span
                     class="material-symbols-outlined">delete</span></a>
         </div>
-        <div id="editor-area" style="flex-grow: 1; border: 1px; display: flex">
-            <div id="editor" style="height: 100%; width: 100%; display: inline-block"></div>
+        <div id="editor-area" class="editor-area">
+            <div id="editor"></div>
         </div>
-        <div id="output-area" style="width: 100%; display: flex; min-height: 200px;">
+        <div id="output-area" class="output-area">
             <div class="io-panel">
                 <div class="io-header">
                     <span>Input</span>
@@ -66,8 +66,7 @@
                         </a>
                     </div>
                 </div>
-                <textarea id="input" rows="8"
-                    style="height: calc(100% - 32px); width: 100%; box-sizing: border-box; padding: 3px; background-color: #25282C; color: #d4d4d4; border: none; border-radius: 0; resize: none;"></textarea>
+                <textarea id="input" rows="8"></textarea>
             </div>
             <div class="io-panel">
                 <div class="io-header">
@@ -78,8 +77,7 @@
                         </a>
                     </div>
                 </div>
-                <textarea id="output" readonly rows="8"
-                    style="height: calc(100% - 32px); width: 100%; box-sizing: border-box; padding: 3px; background-color: #25282C; color: #d4d4d4; border: none; border-radius: 0; resize: none;"></textarea>
+                <textarea id="output" readonly rows="8"></textarea>
             </div>
             <div class="io-panel">
                 <div class="io-header">
@@ -90,14 +88,22 @@
                         </a>
                     </div>
                 </div>
-                <textarea id="error" readonly rows="8"
-                    style="height: calc(100% - 32px); width: 100%; box-sizing: border-box; padding: 3px; background-color: #25282C; color: #ff9999; border: none; border-radius: 0; resize: none;"></textarea>
+                <textarea id="error" readonly rows="8"></textarea>
             </div>
         </div>
     </div>
 </body>
 
 <style>
+    :root {
+        --primary-bg: #25282C;
+        --text-color: #d4d4d4;
+        --text-color-bright: #ffffff;
+        --error-color: #ff9999;
+        --border-color: #666;
+        --hover-bg: #4a4a4a;
+    }
+
     .header-bar {
         min-height: 48px;
         margin: 5px 10px 5px 10px;
@@ -131,7 +137,7 @@
         top: 20%;
         bottom: 20%;
         width: 1px;
-        background-color: #666;
+        background-color: var(--border-color);
     }
 
     #redo-btn {
@@ -146,7 +152,7 @@
         top: 20%;
         bottom: 20%;
         width: 1px;
-        background-color: #666;
+        background-color: var(--border-color);
     }
 
     .header-item {
@@ -154,7 +160,7 @@
         font-family: 'Yu Gothic', 'Meiryo', 'MS PGothic', 'Noto Sans JP', 'Noto Sans', Arial, Helvetica, sans-serif;
         font-weight: bold;
         vertical-align: middle;
-        color: #d4d4d4;
+        color: var(--text-color);
         text-decoration: none;
         padding: 4px 6px;
         border-radius: 3px;
@@ -166,13 +172,13 @@
     .header-item:visited,
     .header-item:active {
         text-decoration: none;
-        color: #d4d4d4;
+        color: var(--text-color);
     }
 
     .header-item:hover {
         text-decoration: none;
-        color: #ffffff;
-        background-color: #4a4a4a;
+        color: var(--text-color-bright);
+        background-color: var(--hover-bg);
     }
 
     .material-symbols-outlined {
@@ -187,12 +193,12 @@
     #title.header-item {
         font-size: 1.8em;
         font-weight: bold;
-        color: #d4d4d4;
+        color: var(--text-color);
     }
 
     #title.header-item:hover {
         background-color: transparent;
-        color: #d4d4d4;
+        color: var(--text-color);
     }
 
     .header-content {
@@ -206,7 +212,7 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        border-right: 1px solid #666;
+        border-right: 1px solid var(--border-color);
         min-width: 200px;
     }
 
@@ -215,13 +221,13 @@
     }
 
     .io-header {
-        background-color: #25282C;
-        color: #d4d4d4;
+        background-color: var(--primary-bg);
+        color: var(--text-color);
         padding: 6px 8px;
         font-weight: bold;
         font-size: 1em;
         font-family: 'Yu Gothic', 'Meiryo', 'MS PGothic', 'Noto Sans JP', 'Noto Sans', Arial, Helvetica, sans-serif;
-        border-bottom: 1px solid #666;
+        border-bottom: 1px solid var(--border-color);
         user-select: none;
         display: flex;
         justify-content: space-between;
@@ -235,7 +241,7 @@
     }
 
     .io-button {
-        color: #d4d4d4;
+        color: var(--text-color);
         text-decoration: none;
         padding: 4px 6px;
         border-radius: 3px;
@@ -246,8 +252,8 @@
     }
 
     .io-button:hover {
-        background-color: #4a4a4a;
-        color: #ffffff;
+        background-color: var(--hover-bg);
+        color: var(--text-color-bright);
     }
 
     .io-button .material-symbols-outlined {
@@ -256,6 +262,15 @@
 
 
     .io-panel textarea {
+        height: calc(100% - 32px);
+        width: 100%;
+        box-sizing: border-box;
+        padding: 3px;
+        background-color: var(--primary-bg);
+        color: var(--text-color);
+        border: none;
+        border-radius: 0;
+        resize: none;
         scrollbar-width: none;
         /* Firefox */
         -ms-overflow-style: none;
@@ -270,14 +285,36 @@
         /* WebKit browsers (Chrome, Safari, newer versions of Edge) */
     }
 
+    .io-panel textarea#error {
+        color: var(--error-color);
+    }
+
+    .editor-area {
+        flex-grow: 1;
+        border: 1px;
+        display: flex;
+    }
+
+    .editor-area #editor {
+        height: 100%;
+        width: 100%;
+        display: inline-block;
+    }
+
+    .output-area {
+        width: 100%;
+        display: flex;
+        min-height: 200px;
+    }
+
 
 
     html,
     body {
         height: 100%;
         margin: 0;
-        background-color: #25282C;
-        color: #d4d4d4;
+        background-color: var(--primary-bg);
+        color: var(--text-color);
     }
 </style>
 
