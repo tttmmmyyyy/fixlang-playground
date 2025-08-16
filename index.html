@@ -159,13 +159,21 @@
     // set initial source code
     var source_param = getParam("src");  // url encoded source
     var source_param2 = getParam("src2"); // base64 encoded source
-    if (source_param2?.trim()) {
-        const decoded_utf8str = atob(source_param2);
-        const decoded_array = new Uint8Array(Array.prototype.map.call(decoded_utf8str, c => c.charCodeAt()));
-        const decoded = new TextDecoder().decode(decoded_array);
-        editor.setValue(decoded);
-    } else if (source_param?.trim()) {
-        editor.setValue(source_param);
+    if (source_param2 !== null) {
+        if (source_param2.trim()) {
+            const decoded_utf8str = atob(source_param2);
+            const decoded_array = new Uint8Array(Array.prototype.map.call(decoded_utf8str, c => c.charCodeAt()));
+            const decoded = new TextDecoder().decode(decoded_array);
+            editor.setValue(decoded);
+        } else {
+            editor.setValue('');
+        }
+    } else if (source_param !== null) {
+        if (source_param.trim()) {
+            editor.setValue(source_param);
+        } else {
+            editor.setValue('');
+        }
     } else {
         editor.setValue(`module Main;
 
