@@ -169,8 +169,9 @@
     } else {
         editor.setValue(`module Main;
 
-main : IO ();
-main = println $ "Hello World!";
+main : IO () = (
+    "Hello World!".println
+);
 `);
     }
 
