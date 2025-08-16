@@ -8,7 +8,7 @@
 
 <body>
     <div style="height: 99%; display: flex; flex-direction: column;">
-        <div id="header">
+        <div id="header" class="header-bar">
             <div class="header-content">
                 <span id="title" class="header-item"
                     style="margin-top: 0px; margin-bottom: 0px; margin-right: 5px; margin-left: 0px; font-family: 'Yu Gothic', 'Meiryo', 'MS PGothic', 'Noto Sans JP', 'Noto Sans', Arial, Helvetica, sans-serif;">
@@ -42,15 +42,24 @@
 </body>
 
 <style>
+    .header-bar {
+        min-height: 48px;
+        padding: 10px 20px 10px 20px;
+        box-sizing: border-box;
+    }
+
     .header-item {
         font-size: 1.2em;
         font-family: 'Yu Gothic', 'Meiryo', 'MS PGothic', 'Noto Sans JP', 'Noto Sans', Arial, Helvetica, sans-serif;
         font-weight: normal;
         vertical-align: middle;
+        color: #222;
     }
 
     #title.header-item {
+        font-size: 1.8em;
         font-weight: bold;
+        color: #222;
     }
 </style>
 
