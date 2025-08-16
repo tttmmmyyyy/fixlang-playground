@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>Fix Playground</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
 <body>
@@ -24,8 +26,10 @@
             </div>
         </div>
         <div id="button-bar" class="button-bar">
-            <a href="#" id="run-btn" class="header-item" onclick="run()">Run</a>
-            <a href="#" id="share-btn" class="header-item" onclick="share()">Share</a>
+            <a href="#" id="run-btn" class="header-item" onclick="run()"><span
+                    class="material-symbols-outlined">play_arrow</span></a>
+            <a href="#" id="share-btn" class="header-item" onclick="share()"><span
+                    class="material-symbols-outlined">link</span></a>
         </div>
         <div id="editor-area" style="flex-grow: 1; border: 1px; display: flex">
             <div id="editor" style="height: 100%; width: 100%; display: inline-block"></div>
@@ -84,6 +88,15 @@
     .header-item:hover {
         text-decoration: none;
         color: #d4d4d4;
+    }
+
+    .material-symbols-outlined {
+        font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24;
+        vertical-align: middle;
     }
 
     #title.header-item {
@@ -246,12 +259,6 @@ main : IO () = (
         let utf8str = String.fromCharCode.apply(null, new TextEncoder().encode(source));
         const encoded = btoa(utf8str);
         const url = location.protocol + '//' + location.host + location.pathname + "?src2=" + encodeURIComponent(encoded);
-        navigator.clipboard.writeText(url).then(function () {
-            var share_btn = document.getElementById("share-btn");
-            share_btn.innerText = "Copied!";
-            window.setTimeout(function () {
-                share_btn.innerText = "Share";
-            }, 1500);
-        })
+        navigator.clipboard.writeText(url);
     }
 </script>
