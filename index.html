@@ -26,11 +26,13 @@
             </div>
         </div>
         <div id="button-bar" class="button-bar">
-            <!-- Group 1: Run, Share -->
+            <!-- Group 1: Run, Share, Info -->
             <a href="#" id="run-btn" class="header-item button-group-1" onclick="run()"><span
                     class="material-symbols-outlined">play_arrow</span></a>
             <a href="#" id="share-btn" class="header-item button-group-1" onclick="share()"><span
                     class="material-symbols-outlined">link</span></a>
+            <a href="#" id="info-btn" class="header-item button-group-1" onclick="showInfo()"><span
+                    class="material-symbols-outlined">info</span></a>
 
             <!-- Group 2: Undo, Redo -->
             <a href="#" id="undo-btn" class="header-item button-group-2" onclick="undoCode()"><span
@@ -92,6 +94,20 @@
             </div>
         </div>
     </div>
+
+    <!-- Info popup modal -->
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Environment Information</h2>
+                <span class="close" onclick="closeInfo()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="info-loading">Loading environment information...</div>
+                <div id="info-content" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
 </body>
 
 <style>
@@ -125,12 +141,12 @@
     }
 
     /* Group separators with vertical lines */
-    #share-btn {
+    #info-btn {
         margin-right: 25px;
         position: relative;
     }
 
-    #share-btn::after {
+    #info-btn::after {
         content: '';
         position: absolute;
         right: -12px;
@@ -315,6 +331,106 @@
         margin: 0;
         background-color: var(--primary-bg);
         color: var(--text-color);
+    }
+
+    /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeIn 0.3s;
+    }
+
+    .modal-content {
+        background-color: var(--primary-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        margin: 10% auto;
+        padding: 0;
+        width: 70%;
+        max-width: 800px;
+        max-height: 70%;
+        animation: slideIn 0.3s;
+    }
+
+    .modal-header {
+        background-color: var(--hover-bg);
+        color: var(--text-color-bright);
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--border-color);
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        font-size: 1.2em;
+        font-family: 'Yu Gothic', 'Meiryo', 'MS PGothic', 'Noto Sans JP', 'Noto Sans', Arial, Helvetica, sans-serif;
+    }
+
+    .close {
+        color: var(--text-color-bright);
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+    .close:hover {
+        opacity: 0.7;
+    }
+
+    .modal-body {
+        padding: 20px;
+        overflow-y: auto;
+        max-height: 400px;
+    }
+
+    #info-content {
+        font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
+        white-space: pre-wrap;
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid var(--border-color);
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    #info-loading {
+        text-align: center;
+        padding: 40px;
+        font-style: italic;
+        color: var(--text-color);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 </style>
 
@@ -594,6 +710,57 @@ main : IO () = (
     function redoCode() {
         editor.redo();
     }
+
+    // handler for info button
+    async function showInfo() {
+        const modal = document.getElementById('info-modal');
+        const loading = document.getElementById('info-loading');
+        const content = document.getElementById('info-content');
+
+        // Show modal and loading state
+        modal.style.display = 'block';
+        loading.style.display = 'block';
+        content.style.display = 'none';
+        content.textContent = '';
+
+        try {
+            // Fetch environment information
+            const response = await fetch(API_URL + '/env');
+            if (response.ok) {
+                const envInfo = await response.text();
+                content.textContent = envInfo;
+            } else {
+                content.textContent = `Error: Server returned status ${response.status}\n\nUnable to fetch environment information.`;
+            }
+        } catch (error) {
+            content.textContent = `Error: Failed to connect to server\n\n${error.message}`;
+        }
+
+        // Hide loading and show content
+        loading.style.display = 'none';
+        content.style.display = 'block';
+    }
+
+    // handler for closing info modal
+    function closeInfo() {
+        const modal = document.getElementById('info-modal');
+        modal.style.display = 'none';
+    }
+
+    // Close modal when clicking outside of it
+    window.addEventListener('click', function (event) {
+        const modal = document.getElementById('info-modal');
+        if (event.target === modal) {
+            closeInfo();
+        }
+    });
+
+    // Close modal with Escape key
+    window.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeInfo();
+        }
+    });
 </script>
 
 </body>
