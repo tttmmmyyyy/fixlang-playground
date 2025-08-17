@@ -324,6 +324,65 @@
     const API_URL = 'https://run-fix-36eqzptjpa-an.a.run.app';  // Production
     // const API_URL = 'http://localhost:8080';  // Development
 
+    // Compression and decompression utilities for src3
+    async function compressString(str) {
+        const stream = new CompressionStream('gzip');
+        const writer = stream.writable.getWriter();
+        const reader = stream.readable.getReader();
+
+        // Write data
+        writer.write(new TextEncoder().encode(str));
+        writer.close();
+
+        // Read compressed data
+        const chunks = [];
+        let done = false;
+        while (!done) {
+            const { value, done: streamDone } = await reader.read();
+            done = streamDone;
+            if (value) chunks.push(value);
+        }
+
+        // Concatenate chunks
+        const compressed = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0));
+        let offset = 0;
+        for (const chunk of chunks) {
+            compressed.set(chunk, offset);
+            offset += chunk.length;
+        }
+
+        return compressed;
+    }
+
+    async function decompressString(compressed) {
+        const stream = new DecompressionStream('gzip');
+        const writer = stream.writable.getWriter();
+        const reader = stream.readable.getReader();
+
+        // Write compressed data
+        writer.write(compressed);
+        writer.close();
+
+        // Read decompressed data
+        const chunks = [];
+        let done = false;
+        while (!done) {
+            const { value, done: streamDone } = await reader.read();
+            done = streamDone;
+            if (value) chunks.push(value);
+        }
+
+        // Concatenate and decode
+        const decompressed = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0));
+        let offset = 0;
+        for (const chunk of chunks) {
+            decompressed.set(chunk, offset);
+            offset += chunk.length;
+        }
+
+        return new TextDecoder().decode(decompressed);
+    }
+
     // a functon to get parameter
     function getParam(name, url) {
         if (!url) url = window.location.href;
@@ -347,29 +406,51 @@
     // set initial source code
     var source_param = getParam("src");  // url encoded source
     var source_param2 = getParam("src2"); // base64 encoded source
-    if (source_param2 !== null) {
-        if (source_param2.trim()) {
-            const decoded_utf8str = atob(source_param2);
-            const decoded_array = new Uint8Array(Array.prototype.map.call(decoded_utf8str, c => c.charCodeAt()));
-            const decoded = new TextDecoder().decode(decoded_array);
-            editor.setValue(decoded);
+    var source_param3 = getParam("src3"); // compressed + base64 encoded source
+
+    async function loadSourceCode() {
+        if (source_param3 !== null) {
+            if (source_param3.trim()) {
+                try {
+                    // Decode base64 to get compressed data
+                    const compressedData = Uint8Array.from(atob(source_param3), c => c.charCodeAt(0));
+                    // Decompress the data
+                    const decompressed = await decompressString(compressedData);
+                    editor.setValue(decompressed);
+                } catch (error) {
+                    console.error('Failed to decompress src3 data:', error);
+                    editor.setValue('// Error: Failed to load compressed source code');
+                }
+            } else {
+                editor.setValue('');
+            }
+        } else if (source_param2 !== null) {
+            if (source_param2.trim()) {
+                const decoded_utf8str = atob(source_param2);
+                const decoded_array = new Uint8Array(Array.prototype.map.call(decoded_utf8str, c => c.charCodeAt()));
+                const decoded = new TextDecoder().decode(decoded_array);
+                editor.setValue(decoded);
+            } else {
+                editor.setValue('');
+            }
+        } else if (source_param !== null) {
+            if (source_param.trim()) {
+                editor.setValue(source_param);
+            } else {
+                editor.setValue('');
+            }
         } else {
-            editor.setValue('');
-        }
-    } else if (source_param !== null) {
-        if (source_param.trim()) {
-            editor.setValue(source_param);
-        } else {
-            editor.setValue('');
-        }
-    } else {
-        editor.setValue(`module Main;
+            editor.setValue(`module Main;
 
 main : IO () = (
     "Hello World!".println
 );
 `);
+        }
     }
+
+    // Load source code asynchronously
+    loadSourceCode();
 
     // handler for run button
     function run() {
@@ -409,12 +490,25 @@ main : IO () = (
     }
 
     // handler for share button
-    function share() {
+    async function share() {
         var source = editor.getValue();
-        let utf8str = String.fromCharCode.apply(null, new TextEncoder().encode(source));
-        const encoded = btoa(utf8str);
-        const url = location.protocol + '//' + location.host + location.pathname + "?src2=" + encodeURIComponent(encoded);
-        navigator.clipboard.writeText(url);
+
+        try {
+            // Try to use src3 (compressed) format first
+            const compressed = await compressString(source);
+            const compressedBase64 = btoa(String.fromCharCode.apply(null, compressed));
+            const url3 = location.protocol + '//' + location.host + location.pathname + "?src3=" + encodeURIComponent(compressedBase64);
+
+            // Use compressed format (src3) - it should be shorter than src2
+            navigator.clipboard.writeText(url3);
+        } catch (error) {
+            // Fallback to src2 format if compression fails
+            console.error('Compression failed, using src2 format:', error);
+            let utf8str = String.fromCharCode.apply(null, new TextEncoder().encode(source));
+            const encoded = btoa(utf8str);
+            const url2 = location.protocol + '//' + location.host + location.pathname + "?src2=" + encodeURIComponent(encoded);
+            navigator.clipboard.writeText(url2);
+        }
 
         // Change icon to check temporarily
         const shareIcon = document.querySelector('#share-btn .material-symbols-outlined');
