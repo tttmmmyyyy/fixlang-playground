@@ -391,6 +391,15 @@
         padding: 20px;
         overflow-y: auto;
         max-height: 400px;
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+    }
+
+    .modal-body::-webkit-scrollbar {
+        display: none;
+        /* WebKit browsers (Chrome, Safari, newer versions of Edge) */
     }
 
     #info-content {
