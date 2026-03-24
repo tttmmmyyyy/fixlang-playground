@@ -27,29 +27,29 @@
         </div>
         <div id="button-bar" class="button-bar">
             <!-- Group 1: Run, Share, Info -->
-            <a href="#" id="run-btn" class="header-item button-group-1" onclick="run()"><span
+            <a href="#" id="run-btn" class="header-item button-group-1" onclick="run()" data-tooltip="Run"><span
                     class="material-symbols-outlined">play_arrow</span></a>
-            <a href="#" id="share-btn" class="header-item button-group-1" onclick="share()"><span
+            <a href="#" id="share-btn" class="header-item button-group-1" onclick="share()" data-tooltip="Share Link"><span
                     class="material-symbols-outlined">link</span></a>
-            <a href="#" id="info-btn" class="header-item button-group-1" onclick="showInfo()"><span
+            <a href="#" id="info-btn" class="header-item button-group-1" onclick="showInfo()" data-tooltip="Info"><span
                     class="material-symbols-outlined">info</span></a>
 
             <!-- Group 2: Undo, Redo -->
-            <a href="#" id="undo-btn" class="header-item button-group-2" onclick="undoCode()"><span
+            <a href="#" id="undo-btn" class="header-item button-group-2" onclick="undoCode()" data-tooltip="Undo"><span
                     class="material-symbols-outlined">undo</span></a>
-            <a href="#" id="redo-btn" class="header-item button-group-2" onclick="redoCode()"><span
+            <a href="#" id="redo-btn" class="header-item button-group-2" onclick="redoCode()" data-tooltip="Redo"><span
                     class="material-symbols-outlined">redo</span></a>
 
             <!-- Group 3: Cut, Copy, Copy All, Paste, Clear -->
-            <a href="#" id="cut-btn" class="header-item button-group-3" onclick="cutCode()"><span
+            <a href="#" id="cut-btn" class="header-item button-group-3" onclick="cutCode()" data-tooltip="Cut"><span
                     class="material-symbols-outlined">content_cut</span></a>
-            <a href="#" id="copy-btn" class="header-item button-group-3" onclick="copyCode()"><span
+            <a href="#" id="copy-btn" class="header-item button-group-3" onclick="copyCode()" data-tooltip="Copy"><span
                     class="material-symbols-outlined">content_copy</span></a>
-            <a href="#" id="copy-all-btn" class="header-item button-group-3" onclick="copyAll()"><span
+            <a href="#" id="copy-all-btn" class="header-item button-group-3" onclick="copyAll()" data-tooltip="Copy All"><span
                     class="material-symbols-outlined">copy_all</span></a>
-            <a href="#" id="paste-btn" class="header-item button-group-3" onclick="pasteCode()"><span
+            <a href="#" id="paste-btn" class="header-item button-group-3" onclick="pasteCode()" data-tooltip="Paste"><span
                     class="material-symbols-outlined">content_paste</span></a>
-            <a href="#" id="clear-btn" class="header-item button-group-3" onclick="clearCode()"><span
+            <a href="#" id="clear-btn" class="header-item button-group-3" onclick="clearCode()" data-tooltip="Clear"><span
                     class="material-symbols-outlined">delete</span></a>
         </div>
         <div id="editor-area" class="editor-area">
@@ -60,10 +60,10 @@
                 <div class="io-header">
                     <span>Input</span>
                     <div class="io-buttons">
-                        <a href="#" class="io-button" onclick="pasteToInput()">
+                        <a href="#" class="io-button" onclick="pasteToInput()" data-tooltip="Paste">
                             <span class="material-symbols-outlined">content_paste</span>
                         </a>
-                        <a href="#" class="io-button" onclick="clearInput()">
+                        <a href="#" class="io-button" onclick="clearInput()" data-tooltip="Clear">
                             <span class="material-symbols-outlined">delete</span>
                         </a>
                     </div>
@@ -74,7 +74,7 @@
                 <div class="io-header">
                     <span>Output</span>
                     <div class="io-buttons">
-                        <a href="#" class="io-button" onclick="copyOutput()">
+                        <a href="#" class="io-button" onclick="copyOutput()" data-tooltip="Copy">
                             <span class="material-symbols-outlined">content_copy</span>
                         </a>
                     </div>
@@ -85,7 +85,7 @@
                 <div class="io-header">
                     <span>Error</span>
                     <div class="io-buttons">
-                        <a href="#" class="io-button" onclick="copyError()">
+                        <a href="#" class="io-button" onclick="copyError()" data-tooltip="Copy">
                             <span class="material-symbols-outlined">content_copy</span>
                         </a>
                     </div>
@@ -138,6 +138,32 @@
     /* Default button spacing */
     .button-bar .header-item {
         margin-right: 5px;
+        position: relative;
+    }
+
+    /* Tooltip */
+    .button-bar .header-item[data-tooltip]::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 4px;
+        padding: 3px 8px;
+        background-color: #555;
+        color: #fff;
+        font-size: 0.75em;
+        font-weight: normal;
+        white-space: nowrap;
+        border-radius: 4px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 100;
+    }
+
+    .button-bar .header-item[data-tooltip]:hover::before {
+        opacity: 1;
     }
 
     /* Group separators with vertical lines */
@@ -265,11 +291,36 @@
         align-items: center;
         font-size: 24px;
         transition: background-color 0.2s;
+        position: relative;
     }
 
     .io-button:hover {
         background-color: var(--hover-bg);
         color: var(--text-color-bright);
+    }
+
+    .io-button[data-tooltip]::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 4px;
+        padding: 3px 8px;
+        background-color: #555;
+        color: #fff;
+        font-size: 0.65em;
+        font-weight: normal;
+        white-space: nowrap;
+        border-radius: 4px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 100;
+    }
+
+    .io-button[data-tooltip]:hover::before {
+        opacity: 1;
     }
 
     .io-button .material-symbols-outlined {
